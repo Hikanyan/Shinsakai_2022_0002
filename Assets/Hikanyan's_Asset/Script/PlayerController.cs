@@ -38,17 +38,24 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    /// <summary>
+    /// ’n–Ê‚ÉG‚Á‚Ä‚é‚Ì”»’è
+    /// </summary>
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Ground")
+        if (other.gameObject.CompareTag("Ground"))
         {
             _isGround = true;
 
         }
     }
+    /// <summary>
+    /// ’n–Ê‚©‚ç—£‚ê‚½‚Ì”»’è
+    /// </summary>
     private void OnCollisionExit(Collision other)
     {
-        if (other.gameObject.tag == "Ground")
+        if (other.gameObject.CompareTag("Ground"))
         {
             _isGround = false;
 

@@ -10,8 +10,8 @@ public class Heel : ItemBase
     [SerializeField] float _lifePoint;
     [SerializeField] ParticleSystem _particleSystem;
 
-    public override void Activate()
+    protected override void Activate()
     {
-        FindObjectOfType<HealthComponent>().Heel(_heelPoint,_lifePoint);
+        FindObjectOfType<HealthComponent>().Heel(heelPoint: _heelPoint);
     }
 }
