@@ -18,12 +18,13 @@ public abstract class ItemBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag.Equals("Player"){
+        if (collider.gameObject.CompareTag("Player"))
+        {
             if (_sound)//‰¹‚ğ–Â‚ç‚·ˆÊ’u‚ÍƒJƒƒ‰‚ÌÀ•W
             {
                 AudioSource.PlayClipAtPoint(_sound, Camera.main.transform.position);
             }
         }
-        
+
     }
 }
