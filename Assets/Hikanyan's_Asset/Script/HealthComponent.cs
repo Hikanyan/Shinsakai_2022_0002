@@ -2,23 +2,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 /// <summary>
 /// Player、enemy、ObjectなどのHPを制御する
 /// </summary>
 
-public class HealthComponent : MonoBehaviour
+public class HealthComponent : GameManager
 {
     /// <summary>
     /// 最大HP
     /// </summary>
-    public float _maxHp;
+    protected float _maxHp;
     /// <summary>
     /// 現在のHP
     /// </summary>
-    public float _life;
-
-    public bool _damageState;
+    protected float _life;
+    /// <summary>
+    /// 無敵中の判定
+    /// </summary>
+    protected bool _damageState;
+    /// <summary>
+    /// 継続系
+    /// </summary>
+    protected float _timer;
 
     /// <summary>
     /// ダメージを受けた時の処理
@@ -33,6 +40,11 @@ public class HealthComponent : MonoBehaviour
         }
 
         _life -= damegePoint;
+
+        if( _life <= 0)
+        {
+            GameOver();
+        }
     }
     /// <summary>
     /// 回復アイテムを使用した時
@@ -41,24 +53,30 @@ public class HealthComponent : MonoBehaviour
     /// <param name="lifePoint">今の体力</param>
     public void Heel(float heelPoint)
     {
-        if (_maxHp > _life)
+        if (_maxHp >= _life)
         {
             _life += heelPoint;
+        }
+        else
+        {
+            _life = _maxHp;
         }
     }
 
     /// <summary>
     /// 継続ダメージと回復スピードの処理
     /// </summary>
-    public void Continuous()
+    public void Continuous(float timer)
     {
+        _timer +=  timer*Time.deltaTime;
+
 
     }
 
     /// <summary>
     /// ダメージを受けた瞬間の無敵時間のタイマー
     /// </summary>
-    protected IEnumerator DamageTimer()
+    public IEnumerator DamageTimer()
     {
         if (_damageState)//既にダメージ状態であれば終了
         {
