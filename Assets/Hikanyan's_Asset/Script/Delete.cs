@@ -10,6 +10,7 @@ public class Delete : GameManager
         if(other.gameObject.tag == "Kill")
         {
             _life--;
+
         }
     }
 }

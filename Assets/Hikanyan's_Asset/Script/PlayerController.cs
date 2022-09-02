@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : GameManager
 {
     [SerializeField] float _speed = 12.0f;
     [SerializeField] float _jumpSpeed = 1.0f;
@@ -39,28 +39,30 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// ’n–Ê‚ÉG‚Á‚Ä‚é‚Ì”»’è
-    /// </summary>
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground"))// ’n–Ê‚ÉG‚Á‚Ä‚é‚Ì”»’è
         {
             _isGround = true;
 
         }
-    }
-    /// <summary>
-    /// ’n–Ê‚©‚ç—£‚ê‚½‚Ì”»’è
-    /// </summary>
-    private void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Enemy"))//“G‚É‚ ‚½‚Á‚½‚Ì”»’è
         {
-            _isGround = false;
-
+            
+            Respawn(other);
+        }
+        if (other.gameObject.CompareTag("Attack"))//UŒ‚‚ª“–‚½‚Á‚½‚Ì”»’è
+        {
+            FindObjectOfType<HealthComponent>().Damege(damegePoint:0);
         }
     }
-
     
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))// ’n–Ê‚©‚ç—£‚ê‚½‚Ì”»’è
+        {
+            _isGround = false;
+        }
+    }
 }
