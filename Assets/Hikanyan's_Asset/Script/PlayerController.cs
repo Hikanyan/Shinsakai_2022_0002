@@ -51,10 +51,10 @@ public class PlayerController : GameManager
             
             Respawn(other);
         }
-        if (other.gameObject.CompareTag("Attack"))//UŒ‚‚ª“–‚½‚Á‚½‚Ì”»’è
+       /* if (other.gameObject.CompareTag("Attack"))//UŒ‚‚ª“–‚½‚Á‚½‚Ì”»’è
         {
             FindObjectOfType<HealthComponent>().Damege(damegePoint:0);
-        }
+        }*/
     }
     
 
