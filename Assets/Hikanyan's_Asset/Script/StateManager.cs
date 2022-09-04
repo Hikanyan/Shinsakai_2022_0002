@@ -4,7 +4,29 @@ using UnityEngine;
 
 public class StateManager
 {
-    enum{
+
+    void Dead()
+    {
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    enum State{
         Poisoned,//“Å
         Blind,//–Ó–Ú
         Asleep,//‡–°
@@ -29,6 +51,21 @@ public class StateManager
         Taunted,//’§”­
         Slowed,//“İ‰»
         Frightened,//‹°•|
-        HorsDeCombat, í“¬•s”\
+        HorsDeCombat,//í“¬•s”\
+        Dead,//€–S
+        Vulnerable,//‘Ï«’á‰º
+        Nauseated,//“f‚«‹C
+        Feeble,//ã‘Ì‰»
+        Cursed,//ô‚¢
+        Doomed,//”j–Å
+        Lucky,//‰^‚ª—Ç‚¢
+        Unlucky,//‰^‚ªˆ«‚¢
+        Disarmed,//•Ší‚ğ’D‚í‚ê‚½
+        Dominated,//x”z
+        Deaf,//‰¹‚ª•·‚±‚¦‚È‚¢
+        Burdened,//d‰×
+        Hungry,//‹ó• 
+        Thirsty,//‚Ì‚Ç‚ÌŠ‰‚«
+        Starving//‹Q‚¦‚Ä‚¢‚é
     }
 }
