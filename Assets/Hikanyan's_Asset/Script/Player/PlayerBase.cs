@@ -4,14 +4,15 @@ using UnityEngine;
 
 
 /// <summary>
-/// 移動
-/// 攻撃
-/// 防御
-/// 
+/// プレイヤーを動かす為のコンポーネント
 /// </summary>
 
 public class PlayerBase : MonoBehaviour
 {
+
+    [Tooltip("プレイヤーの状態を表す変数")]
+    /// <summary>プレイヤーの状態を表す変数</summary>
+    [SerializeField]    _state
     [SerializeField] float _speed = 12.0f;
     [SerializeField] float _jumpSpeed = 1.0f;
     [SerializeField] float _brake = 0.5f;
@@ -37,6 +38,20 @@ public class PlayerBase : MonoBehaviour
         }
 
     }
+
+    protected virtual void CameraMove()
+    {
+        //カメラの向き
+        Vector3 cameraForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
+
+        //プレイヤーの進行方向
+        Vector3 moveForward = cameraForward * _vertical + transform.right * _horizontal;
+
+        //カメラの向いてる方にプレイヤーを動かす
+        _rb.velocity = new Vector3(moveForward.x * _walkSpeed, _rb.velocity.y, moveForward.z * _walkSpeed);
+
+    }
+
     protected virtual void Move()
     {
         _rbVelo = Vector3.zero;
