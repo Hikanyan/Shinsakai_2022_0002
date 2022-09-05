@@ -9,24 +9,7 @@ public class StateManager
     {
         
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    enum State{
+    enum BuffState{
         Poisoned,//“Å
         Blind,//–Ó–Ú
         Asleep,//‡–°

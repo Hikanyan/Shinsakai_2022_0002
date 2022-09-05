@@ -1,27 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+/// <summary>プレイヤーを動かす為のコンポーネント</summary>
 
-/// <summary>
-/// プレイヤーを動かす為のコンポーネント
-/// </summary>
-
-public class PlayerBase : MonoBehaviour
+public abstract class PlayerBase: MonoBehaviour
 {
 
     [Tooltip("プレイヤーの状態を表す変数")]
+
     /// <summary>プレイヤーの状態を表す変数</summary>
-    [SerializeField]    _state
-    [SerializeField] float _speed = 12.0f;
-    [SerializeField] float _jumpSpeed = 1.0f;
+    [SerializeField] PlayerState _state;
+
+    /// <summary>歩く加速度 </summary>
+    [SerializeField] float _acceleration;
+
+    /// <summary>歩く速さ</summary>
+    [SerializeField] float _walkSpeed;
+
+    /// <summary>慣性</summary>
     [SerializeField] float _brake = 0.5f;
-    private bool _isGround = false;
+
+    /// <summary>ジャンプ力</summary>
+    [SerializeField] float _jumpForce;
+
+    /// <summary>ジャンプした回数</summary>
+    [SerializeField] int _jumpCount;
+
+    /// <summary>ジャンプ回数の制限</summary>
+    [SerializeField] float _jumpLimit;
+
+    /// <summary>地面についているか</summary>
+    [SerializeField] bool _onGround;
+
+    /// <summary>カメラのスピード</summary>
+    [SerializeField] float _cameraSpeed;
+
+    /// <summary>ゴールしたか </summary>
+    [SerializeField] bool _goalOn;
+
+    /// <summary>ゲームオーバーしたか </summary>
+    [SerializeField] bool _gameOverOn;
+
+    /// <summary>リジットボディ</summary>
     private Rigidbody _rb;
+
+    /// <summary>リジットボディのベクトル </summary>
     private Vector3 _rbVelo;
 
-    [SerializeField] bool _goalOn;
-    [SerializeField] bool _gameOverOn;
+    /// <summary>前進入力の入力値を入れる変数</summary>
+    float _horizontal;
+
+    /// <summary>左右入力の入力値を入れる変数</summary>
+    float _vertical;
+
+    /// <summary>ジャンプの入力値を入れる変数</summary>
+    float _Jump;
+
+
+    protected abstract void Activate();
 
     void Start()
     {
@@ -55,32 +93,43 @@ public class PlayerBase : MonoBehaviour
     protected virtual void Move()
     {
         _rbVelo = Vector3.zero;
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        float y = 0;
-        if (_isGround == true)
+         _horizontal = Input.GetAxis("Horizontal");
+        _vertical = Input.GetAxis("Vertical");
+        _Jump = 0;
+        if (_onGround == true)
         {
-            y = Input.GetAxis("Jump");
+            _Jump = Input.GetAxis("Jump");
         }
         _rbVelo = _rb.velocity;
-        _rb.AddForce((x * _speed - _rbVelo.x * _brake) * Time.deltaTime, (y * _jumpSpeed) * Time.deltaTime, (z * _speed - _rbVelo.x * _brake) * Time.deltaTime, ForceMode.Impulse);
+        _rb.AddForce((_horizontal * _walkSpeed - _rbVelo.x * _brake) * Time.deltaTime, (_Jump * _jumpForce) * Time.deltaTime, (_vertical * _walkSpeed - _rbVelo.x * _brake) * Time.deltaTime, ForceMode.Impulse);
     }
 
-    private void OnCollisionEnter(Collision other)
+    protected void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Ground"))// 地面に触ってる時の判定
         {
-            _isGround = true;
-
+            _onGround = true;
+            Debug.Log(_onGround);
         }
     }
 
 
-    private void OnCollisionExit(Collision other)
+    protected void OnCollisionExit(Collision other)
     {
         if (other.gameObject.CompareTag("Ground"))// 地面から離れた時の判定
         {
-            _isGround = false;
+            _onGround = false;
+            Debug.Log(_onGround);
         }
+    }
+    
+    /// <summary>プレイヤーの状態を列挙型で定義する</summary>
+    enum PlayerState
+    {
+        idle,
+        run,
+        sideWalk,
+        aim,
+        jump,
     }
 }
