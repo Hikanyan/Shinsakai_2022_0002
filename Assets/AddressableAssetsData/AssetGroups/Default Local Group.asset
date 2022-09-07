@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 1a58310652dd1a2438bc29d6d7e7ebee
+  m_SerializeEntries:
+  - m_GUID: beee0ceab9577f543bf32d376ea8b7ea
+    m_Address: Assets/Hikanyan's_Asset/Images/Backgrounds/haikei01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 79bca19cbaa08b84c9cb51d267d17510, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 1ee77df304a1f3c4db0f4ba90869b2b6, type: 2}
+    - {fileID: 11400000, guid: 9d300494f02f02a4e96d6f8cfbd3953c, type: 2}

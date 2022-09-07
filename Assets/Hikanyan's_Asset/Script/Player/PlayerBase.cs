@@ -5,7 +5,7 @@ using System;
 
 /// <summary>プレイヤーを動かす為のコンポーネント</summary>
 
-public abstract class PlayerBase: MonoBehaviour
+public abstract class PlayerBase : MonoBehaviour
 {
 
     [Tooltip("プレイヤーの状態を表す変数")]
@@ -31,6 +31,9 @@ public abstract class PlayerBase: MonoBehaviour
     /// <summary>ジャンプ回数の制限</summary>
     [SerializeField] float _jumpLimit;
 
+    /// <summary>ジャンプ中にジャンプボタンを離した時の上昇減衰率</summary>
+    [SerializeField] float _gravityDrag = .5f;
+
     /// <summary>地面についているか</summary>
     [SerializeField] bool _onGround;
 
@@ -44,10 +47,13 @@ public abstract class PlayerBase: MonoBehaviour
     [SerializeField] bool _gameOverOn;
 
     /// <summary>リジットボディ</summary>
-    private Rigidbody _rb;
+     Rigidbody _rb;
 
     /// <summary>リジットボディのベクトル </summary>
-    private Vector3 _rbVelo;
+     Vector3 _rbVelo;
+
+    /// <summary>リスポーン </summary>
+     Vector3 _initialPosition = default;
 
     /// <summary>前進入力の入力値を入れる変数</summary>
     float _horizontal;
@@ -58,6 +64,8 @@ public abstract class PlayerBase: MonoBehaviour
     /// <summary>ジャンプの入力値を入れる変数</summary>
     float _Jump;
 
+    /// <summary>持っているアイテムのリスト</summary>
+    List<ItemBase> _itemList = new List<ItemBase>();
 
     protected abstract void Activate();
 
@@ -66,19 +74,20 @@ public abstract class PlayerBase: MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _goalOn = false;
         _gameOverOn = false;
+        _initialPosition = this.transform.position;
     }
     // Update is called once per frame
     void Update()
     {
         if (_goalOn == false && _gameOverOn == false)
         {
-            Move();
+            Movement();
         }
-
     }
 
     protected virtual void CameraMove()
     {
+        Debug.Log("ne");
         //カメラの向き
         Vector3 cameraForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
 
@@ -90,18 +99,40 @@ public abstract class PlayerBase: MonoBehaviour
 
     }
 
-    protected virtual void Move()
+    protected virtual void Movement()
     {
-        _rbVelo = Vector3.zero;
-         _horizontal = Input.GetAxis("Horizontal");
+        _rbVelo = _rb.velocity;//この変数 velocity に速度を計算して、最後にRigidbody.velocityに戻す
+        _horizontal = Input.GetAxis("Horizontal");
         _vertical = Input.GetAxis("Vertical");
         _Jump = 0;
-        if (_onGround == true)
+
+        if(_horizontal != 0)
         {
-            _Jump = Input.GetAxis("Jump");
+            _rbVelo.x = (_horizontal * _walkSpeed - _rbVelo.x * _brake) * Time.deltaTime;
+            Debug.Log(_rbVelo.x);
+        }
+        if(_vertical != 0)
+        {
+            _rbVelo.z = (_vertical * _walkSpeed - _rbVelo.x * _brake) * Time.deltaTime;
+        }
+
+        if (Input.GetButton("Jump")&&_onGround)
+        {
+            _rbVelo.y = (_Jump * _jumpForce) * Time.deltaTime;
+        }
+        else if(!Input.GetButton("Jump") && _rbVelo.y > 0)//ジャンプ中にジャンプボタンを離した時の上昇減衰
+        {
+            _rbVelo.y *= _gravityDrag * Time.deltaTime;
         }
         _rbVelo = _rb.velocity;
-        _rb.AddForce((_horizontal * _walkSpeed - _rbVelo.x * _brake) * Time.deltaTime, (_Jump * _jumpForce) * Time.deltaTime, (_vertical * _walkSpeed - _rbVelo.x * _brake) * Time.deltaTime, ForceMode.Impulse);
+        _rb.AddForce(_rbVelo.x, _rbVelo.y, _rbVelo.z, ForceMode.Impulse);
+    }
+
+    /// <summary>アイテムをアイテムリストに追加する</summary>
+    /// <param name="item"></param>
+    void GetItem(ItemBase item)
+    {
+        _itemList.Add(item);
     }
 
     protected void OnCollisionEnter(Collision other)
@@ -110,6 +141,10 @@ public abstract class PlayerBase: MonoBehaviour
         {
             _onGround = true;
             Debug.Log(_onGround);
+        }
+        if (other.gameObject.CompareTag("Kill"))// ﾀﾋ判定
+        {
+            this.transform.position = _initialPosition;
         }
     }
 
@@ -122,7 +157,7 @@ public abstract class PlayerBase: MonoBehaviour
             Debug.Log(_onGround);
         }
     }
-    
+
     /// <summary>プレイヤーの状態を列挙型で定義する</summary>
     enum PlayerState
     {
