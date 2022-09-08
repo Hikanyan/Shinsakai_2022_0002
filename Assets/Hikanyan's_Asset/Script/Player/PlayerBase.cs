@@ -7,53 +7,55 @@ using System;
 
 public abstract class PlayerBase : MonoBehaviour
 {
+    [Header("メインのカメラを設定する")]
+    /// <summary>メインのカメラを設定する</summary>
+    [SerializeField] GameObject _mainCamera;
+
+    [SerializeField] GameObject _lookAtObj;
 
     [Tooltip("プレイヤーの状態を表す変数")]
 
     /// <summary>プレイヤーの状態を表す変数</summary>
     [SerializeField] PlayerState _state;
 
-    /// <summary>歩く加速度 </summary>
-    [SerializeField] float _acceleration;
-
     /// <summary>歩く速さ</summary>
     [SerializeField] float _walkSpeed;
 
-    /// <summary>慣性</summary>
-    [SerializeField] float _brake = 0.5f;
+    /// <summary>走ったときの速さ</summary>
+    [SerializeField] float _spritSpeed = 15f;
 
-    /// <summary>ジャンプ力</summary>
-    [SerializeField] float _jumpForce;
+    /// <summary>ジャンプの高さ</summary>
+    [SerializeField] float _jumpForce = 5f;
 
     /// <summary>ジャンプした回数</summary>
-    [SerializeField] int _jumpCount;
+    int _jumpCount;
 
     /// <summary>ジャンプ回数の制限</summary>
-    [SerializeField] float _jumpLimit;
+    [SerializeField] int _jumpLimit;
 
     /// <summary>ジャンプ中にジャンプボタンを離した時の上昇減衰率</summary>
     [SerializeField] float _gravityDrag = .5f;
 
-    /// <summary>地面についているか</summary>
-    [SerializeField] bool _onGround;
-
-    /// <summary>カメラのスピード</summary>
-    [SerializeField] float _cameraSpeed;
-
     /// <summary>ゴールしたか </summary>
-    [SerializeField] bool _goalOn;
+     bool _goalOn;
 
     /// <summary>ゲームオーバーしたか </summary>
-    [SerializeField] bool _gameOverOn;
+    bool _gameOverOn;
+
+    /// <summary>しゃがんだか </summary>
+    bool _crouching = false;
 
     /// <summary>リジットボディ</summary>
-     Rigidbody _rb;
+    Rigidbody _rb;
+
+    /// <summary>方向ベクトル </summary>
+    Vector3 _dir = new Vector3(0, 0, 0);
 
     /// <summary>リジットボディのベクトル </summary>
-     Vector3 _rbVelo;
+    Vector3 _rbVelo;
 
     /// <summary>リスポーン </summary>
-     Vector3 _initialPosition = default;
+    Vector3 _initialPosition = default;
 
     /// <summary>前進入力の入力値を入れる変数</summary>
     float _horizontal;
@@ -65,8 +67,9 @@ public abstract class PlayerBase : MonoBehaviour
     float _Jump;
 
     /// <summary>持っているアイテムのリスト</summary>
-    List<ItemBase> _itemList = new List<ItemBase>();
+    List<ItemBase> _itemList = new();
 
+    Quaternion _characterRot;
     protected abstract void Activate();
 
     void Start()
@@ -75,58 +78,127 @@ public abstract class PlayerBase : MonoBehaviour
         _goalOn = false;
         _gameOverOn = false;
         _initialPosition = this.transform.position;
+
+        _mainCamera = GameObject.Find("Player");
+        _lookAtObj = GameObject.Find("Player");
+        _characterRot = transform.localRotation;
+
     }
     // Update is called once per frame
     void Update()
     {
         if (_goalOn == false && _gameOverOn == false)
         {
-            Movement();
+            //Movement();
+            CharacterMove();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        _dir = _mainCamera.transform.TransformDirection(_dir);
+
+        _dir.y = 0;
+
+        if (_dir != Vector3.zero)
+        {
+
+            Quaternion targetRotetion = Quaternion.LookRotation(_dir);
+        }
+        _rb.velocity = _dir.normalized * _walkSpeed + new Vector3(0, _rb.velocity.y, 0f);
+
+        transform.LookAt(new Vector3(_lookAtObj.transform.position.x, transform.position.y, _lookAtObj.transform.position.z));
     }
 
     protected virtual void CameraMove()
     {
-        Debug.Log("ne");
-        //カメラの向き
-        Vector3 cameraForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
-
-        //プレイヤーの進行方向
-        Vector3 moveForward = cameraForward * _vertical + transform.right * _horizontal;
-
-        //カメラの向いてる方にプレイヤーを動かす
-        _rb.velocity = new Vector3(moveForward.x * _walkSpeed, _rb.velocity.y, moveForward.z * _walkSpeed);
-
+        //カメラの向いている方向から見てプレイヤーを動かす
+        //指定したベクトルを正面として
     }
 
-    protected virtual void Movement()
+    /// <summary>
+    /// プレイヤーの移動
+    /// </summary>
+    private void CharacterMove()
     {
-        _rbVelo = _rb.velocity;//この変数 velocity に速度を計算して、最後にRigidbody.velocityに戻す
-        _horizontal = Input.GetAxis("Horizontal");
-        _vertical = Input.GetAxis("Vertical");
-        _Jump = 0;
+        //入力処理
+        var x = Input.GetAxisRaw("Horizontal");
+        var z = Input.GetAxisRaw("Vertical");
+        //方向ベクトルを取得
+        _dir = new Vector3(x, 0, z);
 
-        if(_horizontal != 0)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            _rbVelo.x = (_horizontal * _walkSpeed - _rbVelo.x * _brake) * Time.deltaTime;
-            Debug.Log(_rbVelo.x);
+            float distance = 0.2f;
+            Vector3 rayPosition = transform.position + new Vector3(0.0f, _crouching ? -0.4f : -0.9f, 0.0f);
+            Ray ray = new Ray(rayPosition, Vector3.down);
+            bool isGround = Physics.Raycast(ray, distance);
+            Debug.DrawRay(rayPosition, Vector3.down * distance, Color.red);
+            if (isGround)
+                _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
         }
-        if(_vertical != 0)
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            _rbVelo.z = (_vertical * _walkSpeed - _rbVelo.x * _brake) * Time.deltaTime;
+            //ダッシュ
+            _rb.AddForce(Vector3.forward * _spritSpeed);
         }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            StartCrouch();
+        }
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            EndCrouch();
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
 
-        if (Input.GetButton("Jump")&&_onGround)
-        {
-            _rbVelo.y = (_Jump * _jumpForce) * Time.deltaTime;
+            Interact();
         }
-        else if(!Input.GetButton("Jump") && _rbVelo.y > 0)//ジャンプ中にジャンプボタンを離した時の上昇減衰
-        {
-            _rbVelo.y *= _gravityDrag * Time.deltaTime;
-        }
-        _rbVelo = _rb.velocity;
-        _rb.AddForce(_rbVelo.x, _rbVelo.y, _rbVelo.z, ForceMode.Impulse);
     }
+    void StartCrouch()//しゃがむ
+    {
+        _crouching = true;
+        GetComponent<CapsuleCollider>().gameObject.transform.localScale = new(1, 0.5f, 1);
+    }
+
+    void EndCrouch()//しゃがむから戻る
+    {
+        _crouching = false;
+        GetComponent<CapsuleCollider>().gameObject.transform.localScale = new(1, 1f, 1);
+    }
+    void Interact()
+    {
+        //アイテムを拾う処理
+    }
+
+    /*    protected virtual void Movement()
+        {
+            _rbVelo = _rb.velocity;//この変数 velocity に速度を計算して、最後にRigidbody.velocityに戻す
+            _horizontal = Input.GetAxis("Horizontal");
+            _vertical = Input.GetAxis("Vertical");
+            _Jump = 0;
+
+            if (_horizontal != 0)
+            {
+                _rbVelo.x = _horizontal * _walkSpeed;
+                Debug.Log(_rbVelo.x);
+            }
+            if (_vertical != 0)
+            {
+                _rbVelo.z = _vertical * _walkSpeed;
+            }
+
+            if (Input.GetButton("Jump") && _onGround)
+            {
+                _rbVelo.y = _Jump * _jumpForce;
+            }
+            else if (!Input.GetButton("Jump") && _rbVelo.y > 0)//ジャンプ中にジャンプボタンを離した時の上昇減衰
+            {
+                _rbVelo.y *= _gravityDrag;
+            }
+            _rbVelo = _rb.velocity;
+        }*/
 
     /// <summary>アイテムをアイテムリストに追加する</summary>
     /// <param name="item"></param>
@@ -137,24 +209,14 @@ public abstract class PlayerBase : MonoBehaviour
 
     protected void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground"))// 地面に触ってる時の判定
+        if (other.gameObject.CompareTag("Bounce"))
         {
-            _onGround = true;
-            Debug.Log(_onGround);
+            StartCoroutine("WaitKeyInput");
         }
+
         if (other.gameObject.CompareTag("Kill"))// ﾀﾋ判定
         {
             this.transform.position = _initialPosition;
-        }
-    }
-
-
-    protected void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.CompareTag("Ground"))// 地面から離れた時の判定
-        {
-            _onGround = false;
-            Debug.Log(_onGround);
         }
     }
 
@@ -166,5 +228,14 @@ public abstract class PlayerBase : MonoBehaviour
         sideWalk,
         aim,
         jump,
+    }
+
+    IEnumerator WaitKeyInput()
+    {
+        this.gameObject.GetComponent<PlayerBase>().enabled = false;//PlayerBaseScriptを消す
+        {
+            yield return new WaitForSeconds(1.0f);//一秒待つ
+        }
+        this.gameObject.GetComponent<PlayerBase>().enabled = true;//PlayerBaseScriptを復活
     }
 }
