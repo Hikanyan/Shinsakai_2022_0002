@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEditor;
 /// <summary>
 /// ÉQÅ[ÉÄÇÃêiçsèÛãµÇÃä«óù
 /// </summary>
 
 public class GameManager : MonoBehaviour
 {
-    private List<Transform> _retryPointList = new List<Transform>();
+    private List<Transform> _retryPointList = new();
 
     private bool _gameStart;
     private bool _gamePaused;
@@ -17,6 +18,11 @@ public class GameManager : MonoBehaviour
     private bool _gameRespawn;
 
     public static GameManager instance;//Singleton
+
+#if UNITY_EDITOR
+
+#endif
+
 
     private void Awake()//Singleton
     {
