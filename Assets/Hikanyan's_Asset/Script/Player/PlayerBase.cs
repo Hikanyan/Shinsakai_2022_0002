@@ -79,8 +79,8 @@ public abstract class PlayerBase : MonoBehaviour
         _gameOverOn = false;
         _initialPosition = this.transform.position;
 
-        _mainCamera = GameObject.Find("Player");
-        _lookAtObj = GameObject.Find("Player");
+        //_mainCamera = GameObject.Find("Player");
+        //_lookAtObj = GameObject.Find("Player");
         _characterRot = transform.localRotation;
 
     }
