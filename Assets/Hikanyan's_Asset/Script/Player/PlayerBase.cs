@@ -116,6 +116,7 @@ public abstract class PlayerBase : MonoBehaviour
         //指定したベクトルを正面として
     }
 
+
     /// <summary>
     /// プレイヤーの移動
     /// </summary>
