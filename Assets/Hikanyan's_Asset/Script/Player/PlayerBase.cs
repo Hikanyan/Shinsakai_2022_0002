@@ -130,13 +130,21 @@ public abstract class PlayerBase : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            float distance = 0.2f;
-            Vector3 rayPosition = transform.position + new Vector3(0.0f, _crouching ? -0.4f : -0.9f, 0.0f);
-            Ray ray = new Ray(rayPosition, Vector3.down);
-            bool isGround = Physics.Raycast(ray, distance);
-            Debug.DrawRay(rayPosition, Vector3.down * distance, Color.red);
-            if (isGround)
+            float downDistance = 0.2f;
+            Vector3 downRayPosition = transform.position + new Vector3(0.0f, _crouching ? -0.4f : -0.9f, 0.0f);
+            Ray ray = new Ray(downRayPosition, Vector3.down);
+            bool isGround = Physics.Raycast(ray, downDistance);
+            Debug.DrawRay(downRayPosition, Vector3.down * downDistance, Color.red);
+            if (isGround|| _jumpLimit > _jumpCount)
+            {
+                _jumpCount++;
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+                _rb.velocity = Vector3.zero;//ボタン連打した際に、一気に上がっていかないように、ジャンプの都度、リジッドボディを停止させる
+                if (isGround)
+                {
+                    _jumpCount = 0;
+                }
+            }
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
