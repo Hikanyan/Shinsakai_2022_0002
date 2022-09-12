@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DG.Tweening;
 
 [Serializable]
 public class Teleport : MonoBehaviour
@@ -13,6 +14,7 @@ public class Teleport : MonoBehaviour
 
     private void Start()
     {
+
         _position = _teleportPosition.transform.position;//テレポート先のオブジェクトの座標をポジションに入れる
     }
     private void OnTriggerEnter(Collider other)
@@ -28,14 +30,15 @@ public class Teleport : MonoBehaviour
     IEnumerator Defeat(Collider other)
     {
 
-        other.gameObject.GetComponent<PlayerController>().enabled = false;
-        yield return new WaitForSeconds(0.5f);
-        other.gameObject.GetComponent<MeshRenderer>().enabled = false;
-        this.gameObject.GetComponent<MeshRenderer>().enabled = false;
-        yield return new WaitForSeconds(1);
+        other.gameObject.GetComponent<PlayerController>().enabled = false;//一時的にプレイヤーを操作できなくする
+        //アニメーション再生
+        yield return new WaitForSeconds(0.5f);//0.5秒待つ
+        other.gameObject.GetComponent<MeshRenderer>().enabled = false;//プレイヤーのメッシュレンダラを非表示
+        this.gameObject.GetComponent<MeshRenderer>().enabled = false;//自分のメッシュレンダラを非表示
+        yield return new WaitForSeconds(1);//一秒待つ
         other.transform.position = _position;//プレイヤーをテレポート
-        other.gameObject.GetComponent<MeshRenderer>().enabled = true;
-        other.gameObject.GetComponent<PlayerController>().enabled = true;
+        other.gameObject.GetComponent<MeshRenderer>().enabled = true;//表示
+        other.gameObject.GetComponent<PlayerController>().enabled = true;//動けるようにする
 
     }
 }
