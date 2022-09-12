@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_TriplanarShader 3
+  m_Name: Shader Graphs_TriplanarShader 4
   m_Shader: {fileID: -6465566751694194690, guid: 6a7b4b31921f89c47adedf71f90f63a4, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -34,11 +34,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Texture1:
-        m_Texture: {fileID: 2800000, guid: 4900b2b933f056247806df532f93e2b9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 663e42f73ce2d4c4da1a7bd245ba91a2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2:
-        m_Texture: {fileID: 2800000, guid: c3c4673abc7f1ac4e981951aabacc969, type: 3}
+        m_Texture: {fileID: 2800000, guid: 663e42f73ce2d4c4da1a7bd245ba91a2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2D001:
@@ -65,10 +65,10 @@ Material:
     m_Floats:
     - _Angle: 0.5
     - _Gradient: 0.5
-    - _ObjectSpace: 1
+    - _ObjectSpace: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Tiling001: -0.18
-    - _Tiling002: -0.82
+    - _Tiling001: -0.9
+    - _Tiling002: -1.17
     m_Colors: []
   m_BuildTextureStacks: []
