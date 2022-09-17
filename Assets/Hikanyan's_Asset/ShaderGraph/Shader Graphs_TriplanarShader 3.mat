@@ -65,10 +65,10 @@ Material:
     m_Floats:
     - _Angle: 0.5
     - _Gradient: 0.5
-    - _ObjectSpace: 0
+    - _ObjectSpace: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Tiling001: -2.59
-    - _Tiling002: -4.4
+    - _Tiling001: -0.18
+    - _Tiling002: -0.82
     m_Colors: []
   m_BuildTextureStacks: []
