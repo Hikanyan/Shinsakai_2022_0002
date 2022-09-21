@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
 
 #endif
 
-
     private void Awake()//Singleton
     {
         if (instance == null)
