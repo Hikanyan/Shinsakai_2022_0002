@@ -854,7 +854,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7784257, y: 1}
+    m_SensorSize: {x: 1.7772727, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2836,6 +2836,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHp: 100
+  _life: 0
+  _damageState: 0
   _debuffTimer: 0
   _sound: {fileID: 0}
 --- !u!65 &1193621684
@@ -3366,7 +3368,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7784257, y: 1}
+    m_SensorSize: {x: 1.7772727, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3600,7 +3602,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7784257, y: 1}
+    m_SensorSize: {x: 1.7772727, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4112,7 +4114,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7784257, y: 1}
+    m_SensorSize: {x: 1.7772727, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4345,6 +4347,7 @@ GameObject:
   - component: {fileID: 1855726855}
   - component: {fileID: 1855726854}
   - component: {fileID: 1855726857}
+  - component: {fileID: 1855726858}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Enemy
@@ -4447,6 +4450,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1855726858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855726852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55951ba00355c2346a4917663b3f172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHp: 20
+  _life: 0
+  _damageState: 0
+  _debuffTimer: 0
+  _sound: {fileID: 0}
 --- !u!1 &1864047436
 GameObject:
   m_ObjectHideFlags: 0

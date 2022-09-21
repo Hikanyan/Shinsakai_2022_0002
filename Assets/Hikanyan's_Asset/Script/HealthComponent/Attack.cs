@@ -16,6 +16,7 @@ public class Attack : MonoBehaviour
     {
         if(other.TryGetComponent(out HealthComponent Damage))
         {
+            Debug.Log("“–‚½‚Á‚½");
             Damage.Damage(_damage);
         }
         //FindObjectOfType<HealthComponent>().Damage(_damage);//‘S‘ÌUŒ‚

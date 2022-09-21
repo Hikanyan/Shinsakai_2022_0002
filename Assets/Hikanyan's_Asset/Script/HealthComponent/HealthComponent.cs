@@ -18,11 +18,11 @@ public abstract class HealthComponent : GameManager
     /// <summary>
     /// Œ»İ‚ÌHP
     /// </summary>
-    protected float _life;
+    [SerializeField] protected float _life;
     /// <summary>
     /// –³“G’†‚Ì”»’è
     /// </summary>
-    protected bool _damageState;
+    [SerializeField] protected bool _damageState;
     /// <summary>
     /// Œp‘±Œn
     /// </summary>
