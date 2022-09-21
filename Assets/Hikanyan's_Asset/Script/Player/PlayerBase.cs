@@ -120,7 +120,7 @@ public abstract class PlayerBase : MonoBehaviour
     /// <summary>
     /// プレイヤーの移動
     /// </summary>
-    private void CharacterMove()
+    protected void CharacterMove()
     {
         //入力処理
         var x = Input.GetAxisRaw("Horizontal");
@@ -165,18 +165,18 @@ public abstract class PlayerBase : MonoBehaviour
             Interact();
         }
     }
-    void StartCrouch()//しゃがむ
+    protected void StartCrouch()//しゃがむ
     {
         _crouching = true;
         GetComponent<CapsuleCollider>().gameObject.transform.localScale = new(1, 0.5f, 1);
     }
 
-    void EndCrouch()//しゃがむから戻る
+    protected void EndCrouch()//しゃがむから戻る
     {
         _crouching = false;
         GetComponent<CapsuleCollider>().gameObject.transform.localScale = new(1, 1f, 1);
     }
-    void Interact()
+    protected void Interact()
     {
         //アイテムを拾う処理
     }
@@ -211,7 +211,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     /// <summary>アイテムをアイテムリストに追加する</summary>
     /// <param name="item"></param>
-    void GetItem(ItemBase item)
+    protected void GetItem(ItemBase item)
     {
         _itemList.Add(item);
     }
