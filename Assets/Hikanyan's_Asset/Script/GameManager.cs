@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
 
 #endif
 
+    //[SerializeField] GameObject _a;
+
+
+
 
     private void Awake()//Singleton
     {
@@ -72,9 +76,10 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ƒQ[ƒ€‚ğƒNƒŠƒA‚µ‚½‚Ìˆ—
     /// </summary>
-    protected void GameClear()
+    protected virtual void  GameClear()
     {
         _gameClear = true;
+
     }
 
     protected void Respawn(Collision other)
