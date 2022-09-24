@@ -4,35 +4,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
+
 /// <summary>
 /// Player、enemy、ObjectなどのHPを制御する
 /// </summary>
 
-public class HealthComponent : MonoBehaviour
+public abstract class HealthComponent : GameManager
 {
     /// <summary>
     /// 最大HP
     /// </summary>
-    protected float _maxHp;
+    [SerializeField] protected float _maxHp;
     /// <summary>
     /// 現在のHP
     /// </summary>
-    protected float _life;
+    [SerializeField] protected float _life;
     /// <summary>
     /// 無敵中の判定
     /// </summary>
-    protected bool _damageState;
+    [SerializeField] protected bool _damageState;
     /// <summary>
     /// 継続系
     /// </summary>
-    protected float _timer;
+    [SerializeField] protected float _debuffTimer;
+    /// <summary>アイテムを取った時に鳴る効果音</summary>
+    [SerializeField] AudioClip _sound = default;
+    public void Awake()
+    {
+        _life = _maxHp;
+    }
 
+    protected abstract void Activate(); 
     /// <summary>
     /// ダメージを受けた時の処理
     /// </summary>
     /// <param name="damegePoint">ダメージ量</param>
     /// <param name="lifePoint">今の体力</param>
-    public void Damege(float damegePoint)
+    public void Damage(float damegePoint)
     {
         if (_damageState)
         {
@@ -41,9 +49,9 @@ public class HealthComponent : MonoBehaviour
 
         _life -= damegePoint;
 
-        if( _life <= 0)
+        if (_life <= 0)
         {
-            GameManager.instance.GameOver();
+            GameOver();
         }
     }
     /// <summary>
@@ -68,7 +76,7 @@ public class HealthComponent : MonoBehaviour
     /// </summary>
     public void Continuous(float timer)
     {
-        _timer +=  timer*Time.deltaTime;
+        _debuffTimer += timer * Time.deltaTime;
 
 
     }
