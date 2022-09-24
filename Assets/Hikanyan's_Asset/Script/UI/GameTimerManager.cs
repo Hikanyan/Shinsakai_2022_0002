@@ -10,6 +10,8 @@ using System;
 /// </summary>
 public class GameTimerManager : MonoBehaviour
 {
+    [SerializeField] int _timeLimit = 360;
+
     /// <summary>
     /// カウントダウンストリーム
     /// このObservableを各クラスがSubscribeする
@@ -26,9 +28,9 @@ public class GameTimerManager : MonoBehaviour
 
     void Awake()
     {
-        //60秒カウントのストリームを作成
+        //_timeLimit秒カウントのストリームを作成
         //PublishでHot変換
-        _countDownObservable = CreateCountDownObservable(60).Publish();
+        _countDownObservable = CreateCountDownObservable(_timeLimit).Publish();
     }
 
     void Start()

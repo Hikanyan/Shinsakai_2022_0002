@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class Gool : GameManager
+public class Gool
 {
     [SerializeField] Image _image;
     private void OnCollisionEnter(Collision other)
@@ -11,7 +11,7 @@ public class Gool : GameManager
         {
             Debug.Log("ÉSÅ[Éã");
             _image.enabled = true;
-            GameClear();
+            GameManager.instance.GameClear();
         }
     }
     private void Start()

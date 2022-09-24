@@ -8,7 +8,7 @@ using UniRx;
 /// PlayerAenemyAObject‚È‚Ç‚ÌHP‚ğ§Œä‚·‚é
 /// </summary>
 
-public class HealthComponent : GameManager
+public class HealthComponent : MonoBehaviour
 {
     /// <summary>
     /// Å‘åHP
@@ -43,7 +43,7 @@ public class HealthComponent : GameManager
 
         if( _life <= 0)
         {
-            GameOver();
+            GameManager.instance.GameOver();
         }
     }
     /// <summary>

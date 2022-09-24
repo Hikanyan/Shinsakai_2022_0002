@@ -9,7 +9,7 @@ using System;
 
 [RequireComponent(typeof(AudioSource))]
 
-public class CountDownSoundComponent : GameManager
+public class CountDownSoundComponent : MonoBehaviour
 {
 
     //Œø‰Ê‰¹
@@ -58,7 +58,7 @@ public class CountDownSoundComponent : GameManager
             .Subscribe(_ => {; }, () =>
             {
                 audioSource.PlayOneShot(_countDownEnd);
-                GameOver();
+                GameManager.instance.GameOver();
             });
     }
 }

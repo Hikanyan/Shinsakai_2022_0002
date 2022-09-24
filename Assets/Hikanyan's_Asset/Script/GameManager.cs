@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームオーバーした時の処理
     /// </summary>
-    protected virtual void GameOver()
+    public void GameOver()
     {
         _gameOver = true;
         Debug.Log("GAMEOVER");
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームをクリアした時の処理
     /// </summary>
-    protected virtual void GameClear()
+    public void GameClear()
     {
         _gameClear = true;
 
