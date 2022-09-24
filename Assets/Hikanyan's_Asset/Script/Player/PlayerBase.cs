@@ -72,7 +72,7 @@ public abstract class PlayerBase : MonoBehaviour
     Quaternion _characterRot;
     protected abstract void Activate();
 
-    void Start()
+    protected void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _goalOn = false;
@@ -85,7 +85,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     }
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         if (_goalOn == false && _gameOverOn == false)
         {
@@ -94,7 +94,12 @@ public abstract class PlayerBase : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    protected void FixedUpdate()
+    {
+        LookAtMove();
+    }
+
+    protected virtual void LookAtMove()
     {
         _dir = _mainCamera.transform.TransformDirection(_dir);
 
@@ -120,7 +125,7 @@ public abstract class PlayerBase : MonoBehaviour
     /// <summary>
     /// ƒvƒŒƒCƒ„[‚ÌˆÚ“®
     /// </summary>
-    protected void CharacterMove()
+    protected virtual void CharacterMove()
     {
         //“ü—Íˆ—
         var x = Input.GetAxisRaw("Horizontal");

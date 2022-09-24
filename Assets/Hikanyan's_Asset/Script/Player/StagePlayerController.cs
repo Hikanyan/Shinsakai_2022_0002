@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StagePlayer : PlayerBase
+public class StagePlayerController : PlayerBase
 {
     protected override void Activate()
     {

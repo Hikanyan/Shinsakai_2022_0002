@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;//Singleton
 
+    
+
 #if UNITY_EDITOR
 
 #endif
@@ -55,7 +57,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームオーバーした時の処理
     /// </summary>
-    protected void GameOver()
+    public void GameOver()
     {
         _gameOver = true;
         Debug.Log("GAMEOVER");
@@ -71,15 +73,16 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームをクリアした時の処理
     /// </summary>
-    protected void GameClear()
+    public void GameClear()
     {
         _gameClear = true;
+
     }
 
     protected void Respawn(Collision other)
     {
         _gameRespawn = true;
-        
+
         //座標を戻す
         this.gameObject.transform.position = _retryPointList.Last().position;//ここ
 
