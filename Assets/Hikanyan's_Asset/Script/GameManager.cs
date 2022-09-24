@@ -19,14 +19,11 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;//Singleton
 
+    
+
 #if UNITY_EDITOR
 
 #endif
-
-    //[SerializeField] GameObject _a;
-
-
-
 
     private void Awake()//Singleton
     {
@@ -60,7 +57,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームオーバーした時の処理
     /// </summary>
-    protected void GameOver()
+    protected virtual void GameOver()
     {
         _gameOver = true;
         Debug.Log("GAMEOVER");
@@ -76,7 +73,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// ゲームをクリアした時の処理
     /// </summary>
-    protected virtual void  GameClear()
+    protected virtual void GameClear()
     {
         _gameClear = true;
 
@@ -85,7 +82,7 @@ public class GameManager : MonoBehaviour
     protected void Respawn(Collision other)
     {
         _gameRespawn = true;
-        
+
         //座標を戻す
         this.gameObject.transform.position = _retryPointList.Last().position;//ここ
 

@@ -6,9 +6,10 @@ using DG.Tweening;
 using UniRx;
 using System;
 
+
 [RequireComponent(typeof(AudioSource))]
 
-public class CountDownSoundComponent : MonoBehaviour
+public class CountDownSoundComponent : GameManager
 {
 
     //効果音
@@ -18,6 +19,7 @@ public class CountDownSoundComponent : MonoBehaviour
 
     [SerializeField] GameTimerManager _gameTimerManager;
     [SerializeField] TextMeshProUGUI _timer;
+
     void Start()
     {
 
@@ -43,7 +45,7 @@ public class CountDownSoundComponent : MonoBehaviour
             .First(timer => timer <= 10)
             .Subscribe(_ => _timer.color = Color.red);
 
-        
+
         //カウントが10秒以下になったらSEを1秒毎に鳴らす
         _gameTimerManager
             .CountDownObservable
@@ -53,7 +55,10 @@ public class CountDownSoundComponent : MonoBehaviour
         //カウントが完了したタイミングでSEを鳴らす
         _gameTimerManager
             .CountDownObservable
-            .Subscribe(_ => {; }, () => audioSource.PlayOneShot(_countDownEnd));
-        
+            .Subscribe(_ => {; }, () =>
+            {
+                audioSource.PlayOneShot(_countDownEnd);
+                GameOver();
+            });
     }
 }
