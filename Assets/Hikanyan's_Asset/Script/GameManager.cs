@@ -5,6 +5,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine.UI;
 using UniRx;
+using System;
+
 /// <summary>
 /// ゲームの進行状況の管理
 /// </summary>
@@ -13,15 +15,19 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;//Singleton
     private List<Transform> _retryPointList = new();
-
-    public bool _gameStart;
-    public bool _gamePaused;
-    public bool _gameOver;
-    public bool _gameClear;
-    public bool _gameStop;
-    public bool _gameRespawn;
-
+    [Header("プレイヤーコントローラー")]
+    [SerializeField] PlayerController _playerController;
+    [Header("Start画像")]
+    [SerializeField] Image _startImage;
+    [Header("Gool画像")]
     [SerializeField] Image _goolTextImage;
+    [NonSerialized] public bool _gameStart;
+    [NonSerialized] public bool _gamePaused;
+    [NonSerialized] public bool _gameOver;
+    [NonSerialized] public bool _gameClear;
+    [NonSerialized] public bool _gameStop;
+    [NonSerialized] public bool _gameRespawn;
+
 
 #if UNITY_EDITOR
 
@@ -41,12 +47,15 @@ public class GameManager : MonoBehaviour
     }
     private void Start()//初期化
     {
+        _playerController.gameObject.GetComponent<PlayerController>().enabled = false;//一時的にプレイヤーを操作できなくする
         _gameStart = false;
         _gamePaused = false;
         _gameOver = false;
         _gameClear = false;
 
+        _startImage.enabled = true;
         _goolTextImage.enabled = false;
+
     }
 
     /// <summary>
@@ -56,6 +65,8 @@ public class GameManager : MonoBehaviour
     public void GameStart()
     {
         _gameStart = true;
+        _startImage.enabled = false;
+        _playerController.gameObject.GetComponent<PlayerController>().enabled = true;
     }
 
     /// <summary>

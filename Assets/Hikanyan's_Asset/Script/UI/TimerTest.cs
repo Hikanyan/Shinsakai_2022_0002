@@ -9,19 +9,9 @@ using Debug = UnityEngine.Debug;
 public class TimerTest : MonoBehaviour
 {
     [SerializeField] GameTimerManager _gameTimerManager;
-    [SerializeField] PlayerController _playerController;
-    [SerializeField] Image _startImage;
     [SerializeField] TextMeshProUGUI _countText;
     bool isCounting = true;
-    bool isGameClear = false;
 
-
-
-    private void Awake()
-    {
-        _startImage.enabled = true;
-        _playerController.gameObject.GetComponent<PlayerController>().enabled = false;//一時的にプレイヤーを操作できなくする
-    }
 
     private IEnumerator Start()
     {
@@ -29,9 +19,7 @@ public class TimerTest : MonoBehaviour
         var waitUntilSpace = new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonUp(0));
         yield return waitUntilSpace;
 
-        //動ける
-        _playerController.gameObject.GetComponent<PlayerController>().enabled = true;
-        _startImage.enabled = false;
+        
 
         //// 参考情報として経過時間を測定する
         //var stopwatch = new Stopwatch();
@@ -50,6 +38,7 @@ public class TimerTest : MonoBehaviour
                 },
                 () =>
                 {
+                    //動ける
                     _countText.text = "";
                     GameManager.Instance.GameStart();
                     // カウントダウンが完了したとき
