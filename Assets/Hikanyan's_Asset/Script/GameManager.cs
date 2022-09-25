@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Image _startImage;
     [Header("Gool‰æ‘œ")]
     [SerializeField] Image _goolTextImage;
+    [Header("GameOver‰æ‘œ")]
+    [SerializeField] Image _gameOverTextImage;
     [NonSerialized] public bool _gameStart;
     [NonSerialized] public bool _gamePaused;
     [NonSerialized] public bool _gameOver;
@@ -54,6 +56,7 @@ public class GameManager : MonoBehaviour
         _gameClear = false;
 
         _startImage.enabled = true;
+        _gameOverTextImage.enabled = false;
         _goolTextImage.enabled = false;
 
     }
@@ -75,6 +78,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         _gameOver = true;
+        _gameOverTextImage.enabled = true;
         Debug.Log("GAMEOVER");
     }
     /// <summary>
@@ -94,6 +98,7 @@ public class GameManager : MonoBehaviour
         _gameStop = true;
         _goolTextImage.enabled = true;
         Debug.Log("ƒNƒŠƒA");
+        _playerController.gameObject.GetComponent<PlayerController>().enabled = false;
     }
 
     protected void Respawn(Collision other)
