@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Gool :MonoBehaviour
 {
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {

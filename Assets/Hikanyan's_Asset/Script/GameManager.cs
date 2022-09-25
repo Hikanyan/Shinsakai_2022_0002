@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UniRx;
 using System;
 
+using UnityEngine.SceneManagement;
 /// <summary>
 /// ゲームの進行状況の管理
 /// </summary>
@@ -29,7 +30,8 @@ public class GameManager : MonoBehaviour
     [NonSerialized] public bool _gameClear;
     [NonSerialized] public bool _gameStop;
     [NonSerialized] public bool _gameRespawn;
-
+    [Header("SceneChange")]
+    [SerializeField] string _gameSceneChangeName;
 
 #if UNITY_EDITOR
 
@@ -99,6 +101,7 @@ public class GameManager : MonoBehaviour
         _goolTextImage.enabled = true;
         Debug.Log("クリア");
         _playerController.gameObject.GetComponent<PlayerController>().enabled = false;
+        StartCoroutine(GameStay());
     }
 
     protected void Respawn(Collision other)
@@ -117,5 +120,12 @@ public class GameManager : MonoBehaviour
         {
             _retryPointList.Add(other.gameObject.transform);
         }
+    }
+
+
+    IEnumerator GameStay()
+    {
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene(_gameSceneChangeName);
     }
 }

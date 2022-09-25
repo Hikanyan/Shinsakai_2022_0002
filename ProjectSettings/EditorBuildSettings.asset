@@ -8,4 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
+  - enabled: 1
+    path: Assets/Hikanyan's_Asset/Scene/SelectScene.unity
+    guid: 5af370ace2fc6ad4db1e468253f5f306
+  - enabled: 1
+    path: Assets/Hikanyan's_Asset/Scene/StageScene.unity
+    guid: 79d2d7ef163c1024a83cfec3086d768e
+  - enabled: 1
+    path: Assets/Hikanyan's_Asset/Scene/WorldScene1.unity
+    guid: a944284b704178e4abcbbbbfc48d460d
+  - enabled: 1
+    path: Assets/Hikanyan's_Asset/Scene/WorldScene2.unity
+    guid: ca7fe25ba829f2648a050d924a9901f7
   m_configObjects: {}

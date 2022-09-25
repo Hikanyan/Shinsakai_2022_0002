@@ -33,4 +33,8 @@ public class PlayerOnTrigger : MonoBehaviour
             transform.DOPause();
         }
     }
+    public void DOTweenReset()
+    {
+        transform.DORewind();
+    }
 }
