@@ -3,23 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
+using UnityEngine.UI;
+using UniRx;
+using System;
+
+using UnityEngine.SceneManagement;
 /// <summary>
 /// ゲームの進行状況の管理
 /// </summary>
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;//Singleton
     private List<Transform> _retryPointList = new();
-
-    private bool _gameStart;
-    private bool _gamePaused;
-    private bool _gameOver;
-    private bool _gameClear;
-    private bool _gameRespawn;
-
-    public static GameManager instance;//Singleton
-
-    
+    [Header("プレイヤーコントローラー")]
+    [SerializeField] PlayerController _playerController;
+    [Header("Start画像")]
+    [SerializeField] Image _startImage;
+    [Header("Gool画像")]
+    [SerializeField] Image _goolTextImage;
+    [Header("GameOver画像")]
+    [SerializeField] Image _gameOverTextImage;
+    [NonSerialized] public bool _gameStart;
+    [NonSerialized] public bool _gamePaused;
+    [NonSerialized] public bool _gameOver;
+    [NonSerialized] public bool _gameClear;
+    [NonSerialized] public bool _gameStop;
+    [NonSerialized] public bool _gameRespawn;
+    [Header("SceneChange")]
+    [SerializeField] string _gameSceneChangeName;
 
 #if UNITY_EDITOR
 
@@ -27,9 +39,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()//Singleton
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -39,19 +51,27 @@ public class GameManager : MonoBehaviour
     }
     private void Start()//初期化
     {
+        _playerController.gameObject.GetComponent<PlayerController>().enabled = false;//一時的にプレイヤーを操作できなくする
         _gameStart = false;
         _gamePaused = false;
         _gameOver = false;
         _gameClear = false;
+
+        _startImage.enabled = true;
+        _gameOverTextImage.enabled = false;
+        _goolTextImage.enabled = false;
+
     }
 
     /// <summary>
     /// ゲームがスタートした時に呼ばれる処理
     /// </summary>
 
-    protected void GameStart()
+    public void GameStart()
     {
         _gameStart = true;
+        _startImage.enabled = false;
+        _playerController.gameObject.GetComponent<PlayerController>().enabled = true;
     }
 
     /// <summary>
@@ -60,6 +80,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         _gameOver = true;
+        _gameOverTextImage.enabled = true;
         Debug.Log("GAMEOVER");
     }
     /// <summary>
@@ -76,7 +97,11 @@ public class GameManager : MonoBehaviour
     public void GameClear()
     {
         _gameClear = true;
-
+        _gameStop = true;
+        _goolTextImage.enabled = true;
+        Debug.Log("クリア");
+        _playerController.gameObject.GetComponent<PlayerController>().enabled = false;
+        StartCoroutine(GameStay());
     }
 
     protected void Respawn(Collision other)
@@ -95,5 +120,12 @@ public class GameManager : MonoBehaviour
         {
             _retryPointList.Add(other.gameObject.transform);
         }
+    }
+
+
+    IEnumerator GameStay()
+    {
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene(_gameSceneChangeName);
     }
 }

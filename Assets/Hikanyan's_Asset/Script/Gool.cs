@@ -1,21 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-public class Gool
+public class Gool :MonoBehaviour
 {
-    [SerializeField] Image _image;
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))//
+        if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("ÉSÅ[Éã");
-            _image.enabled = true;
-            GameManager.instance.GameClear();
+            GameManager.Instance.GameClear();
         }
-    }
-    private void Start()
-    {
-        _image.enabled = false;
     }
 }

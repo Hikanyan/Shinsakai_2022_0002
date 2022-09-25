@@ -28,7 +28,7 @@ public class CountDownSoundComponent : MonoBehaviour
 
         //タイマの残り時間を描画する
         _gameTimerManager
-            .CountDownObservable
+            .InPlayCountDownObservable
             .Subscribe(time =>
             {
                 //OnNextで時刻の描画
@@ -41,24 +41,24 @@ public class CountDownSoundComponent : MonoBehaviour
 
         //タイマが10秒以下になったタイミングで色を赤くする
         _gameTimerManager
-            .CountDownObservable
+            .InPlayCountDownObservable
             .First(timer => timer <= 10)
             .Subscribe(_ => _timer.color = Color.red);
 
 
         //カウントが10秒以下になったらSEを1秒毎に鳴らす
         _gameTimerManager
-            .CountDownObservable
+            .InPlayCountDownObservable
             .Where(time => time <= 10)
             .Subscribe(_ => audioSource.PlayOneShot(_countDownTick));
 
         //カウントが完了したタイミングでSEを鳴らす
         _gameTimerManager
-            .CountDownObservable
+            .InPlayCountDownObservable
             .Subscribe(_ => {; }, () =>
             {
                 audioSource.PlayOneShot(_countDownEnd);
-                GameManager.instance.GameOver();
+                GameManager.Instance.GameOver();
             });
     }
 }

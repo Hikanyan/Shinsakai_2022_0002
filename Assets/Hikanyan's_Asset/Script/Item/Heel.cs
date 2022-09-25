@@ -7,11 +7,14 @@ using UnityEngine;
 public class Heel : ItemBase
 {
     [SerializeField] float _heelPoint;
-    [SerializeField] float _lifePoint;
     [SerializeField] ParticleSystem _particleSystem;
 
     protected override void Activate()
     {
-        FindObjectOfType<HealthComponent>().Heel(heelPoint: _heelPoint);
+        if(this.TryGetComponent(out HealthComponent Heel))
+        {
+            Heel.Heel(_heelPoint);
+        }
+        //FindObjectOfType<HealthComponent>().Heel(heelPoint: _heelPoint);//‘S‘Ì‰ñ•œ
     }
 }

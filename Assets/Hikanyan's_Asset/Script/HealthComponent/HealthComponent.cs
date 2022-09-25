@@ -9,7 +9,7 @@ using UniRx;
 /// Player、enemy、ObjectなどのHPを制御する
 /// </summary>
 
-public abstract class HealthComponent : GameManager
+public abstract class HealthComponent : MonoBehaviour
 {
     /// <summary>
     /// 最大HP
@@ -19,6 +19,8 @@ public abstract class HealthComponent : GameManager
     /// 現在のHP
     /// </summary>
     [SerializeField] protected float _life;
+
+    public float Life => _life;
     /// <summary>
     /// 無敵中の判定
     /// </summary>
@@ -51,7 +53,16 @@ public abstract class HealthComponent : GameManager
 
         if (_life <= 0)
         {
-            GameOver();
+            if (this.gameObject.CompareTag("Player"))
+            {
+                this.gameObject.GetComponent<PlayerController>().enabled = false;//一時的にプレイヤーを操作できなくする
+                GameManager.Instance.GameOver();
+
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
     /// <summary>
