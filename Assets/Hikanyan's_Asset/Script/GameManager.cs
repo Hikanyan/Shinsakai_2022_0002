@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
+using UnityEngine.UI;
+using UniRx;
 /// <summary>
 /// ゲームの進行状況の管理
 /// </summary>
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;//Singleton
     private List<Transform> _retryPointList = new();
 
-    private bool _gameStart;
-    private bool _gamePaused;
-    private bool _gameOver;
-    private bool _gameClear;
-    private bool _gameRespawn;
+    public bool _gameStart;
+    public bool _gamePaused;
+    public bool _gameOver;
+    public bool _gameClear;
+    public bool _gameStop;
+    public bool _gameRespawn;
 
-    public static GameManager instance;//Singleton
-
-    
+    [SerializeField] Image _goolTextImage;
 
 #if UNITY_EDITOR
 
@@ -27,9 +29,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()//Singleton
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -43,13 +45,15 @@ public class GameManager : MonoBehaviour
         _gamePaused = false;
         _gameOver = false;
         _gameClear = false;
+
+        _goolTextImage.enabled = false;
     }
 
     /// <summary>
     /// ゲームがスタートした時に呼ばれる処理
     /// </summary>
 
-    protected void GameStart()
+    public void GameStart()
     {
         _gameStart = true;
     }
@@ -76,7 +80,9 @@ public class GameManager : MonoBehaviour
     public void GameClear()
     {
         _gameClear = true;
-
+        _gameStop = true;
+        _goolTextImage.enabled = true;
+        Debug.Log("クリア");
     }
 
     protected void Respawn(Collision other)
